@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  alert:
+    image: grafana/grafana:4.2.0
+    container_name: grafana
+    volumes:
+     - ./etc:/etc/grafana
+     - ./data:/var/lib/grafana
+    ports:
+     - 7052:3000
+    labels:
+        - traefik.alert=3000
+        - traefik.frontend.rule=Host:alert.services.alin.be
+        - traefik.backend=alert
+        - traefik.frontend.entryPoints=http,https
+    networks:
+        - web
+
+networks:
+  web:
+    external:
+      name: traefik_webgateway
