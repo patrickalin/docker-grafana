@@ -1,4 +1,4 @@
-version: '3'
+version: '3.2'
 
 services:
   alert:
@@ -9,6 +9,8 @@ services:
      - ./data:/var/lib/grafana
     ports:
      - 7052:3000
+    environment:
+     - GF_SERVER_ROOT_URL=https://alert.services.alin.be/
     labels:
         - traefik.alert=3000
         - traefik.frontend.rule=Host:alert.services.alin.be
