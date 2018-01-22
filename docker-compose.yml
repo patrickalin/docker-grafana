@@ -1,25 +1,31 @@
-version: '3.2'
+version: '3.5'
 
 services:
   alert:
-    image: grafana/grafana:4.4.1
-    container_name: grafana
-    volumes:
-     - ./etc:/etc/grafana
-     - ./data:/var/lib/grafana
-    ports:
-     - 7052:3000
-    environment:
-     - GF_SERVER_ROOT_URL=https://alert.services.alin.be/
-    labels:
-        - traefik.alert=3000
-        - traefik.frontend.rule=Host:alert.services.alin.be
-        - traefik.backend=alert
+    image: grafana/grafana:4.6.3
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: 100M
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.port=3000
+        - traefik.frontend.rule=Host:grafana.services.alin.be
         - traefik.frontend.entryPoints=http,https
-    networks:
-        - web
+        - traefik.backend.loadbalancer.method=wrr
+    volumes:
+     - ./grafana/etc:/etc/grafana
+     - ./grafana/data:/var/lib/grafana
+     - /etc/timezone:/etc/timezone
+     - /etc/localtime:/etc/localtime
+    environment:
+     - GF_SERVER_ROOT_URL=https://grafana.services.alin.be/
+     - GF_SECURITY_ADMIN_PASSWORD=secret
 
 networks:
-  web:
+  default:
     external:
-      name: traefik_webgateway
+      name: traefik-net

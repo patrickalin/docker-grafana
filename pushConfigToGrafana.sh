@@ -1,14 +1,44 @@
 echo "Test Key"
 echo "----------"
 
-KEY=nB0RWlCaTJvRWJBcDJXZDU4QWk0UEdVcksiLCJuIjoiZG9ja2VyIiwiaWQiOjF9
-HOST="https://alert.services.alin.be/api"
+KEY=eyJrIjoiZmJYY2xjdk94R0s2bHlmNlVRTmFqZnRHTEZrdmlyQ3QiLCJuIjoiYWRtaW4iLCJpZCI6MX0=
+HOST="http://grafana.services.alin.be/api"
 
 curl -k -H "Authorization: Bearer $KEY" $HOST/dashboards/home
 
 echo ""
+echo ""
 echo "ADD DATASOURCE"
 echo "----------"
+
+curl -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -X POST $HOST/datasources -H "Content-Type: application/json" -X POST -d '{
+  "name":"elasticsearch",
+  "type":"elasticsearch",
+  "url":"http://elasticsearch.services.alin.be",
+  "access":"proxy",
+  "isDefault":true,
+  "basicAuth":true,
+  "basicAuthUser":"elastic",
+  "basicAuthPassword":"changeme"
+}'
+
+curl -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -X POST $HOST/datasources -H "Content-Type: application/json" -X POST -d '{
+  "name":"prometheus",
+  "type":"prometheus",
+  "url":"http://prometheus.services.alin.be",
+  "access":"proxy",
+  "isDefault":true,
+  "basicAuth":false
+}'
+
+curl -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -X POST $HOST/datasources -H "Content-Type: application/json" -X POST -d '{
+  "name":"faasPrometheus",
+  "type":"prometheus",
+  "url":"http://morpheus.alin.be:9090",
+  "access":"proxy",
+  "isDefault":true,
+  "basicAuth":false
+}'
 
 curl -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -X POST $HOST/datasources -H "Content-Type: application/json" -X POST -d '{
   "name":"kong",
@@ -19,6 +49,8 @@ curl -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -X POST
   "basicAuth":false
 }'
 
+echo ""
+
 curl -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -X POST $HOST/datasources -H "Content-Type: application/json" -X POST -d '{
   "name":"statd",
   "type":"graphite",
@@ -27,6 +59,7 @@ curl -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -X POST
   "basicAuth":false
 }'
 
+echo ""
 echo ""
 echo "CHANNEL ALERT"
 echo "----------"
@@ -40,6 +73,7 @@ curl -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -X POST
   }
 }'
 
+echo ""
 echo ""
 echo "Change Password Admin"
 echo "----------"
@@ -56,9 +90,14 @@ curl -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -X PUT 
 "password":"PASSSWORD"}'
 
 echo ""
-echo "Change Password Admin"
+echo ""
+echo "Import Dashboard"
 echo "----------"
 
-#curl -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -X GET $HOST/dashboards/db/spf-etcs-fod-waso -H "Content-Type: application/json" -o dashboards.json
+#curl -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -X GET $HOST/dashboards/db/aaa -H "Content-Type: application/json" -o aaa.json
 
-curl -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -X POST $HOST/dashboards/db -H "Content-Type: application/json" -d @dashboards.json
+curl -H "Accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -X POST $HOST/dashboards/db -H "Content-Type: application/json" -d @configuration/originalFASS.json
+
+echo ""
+echo ""
+
