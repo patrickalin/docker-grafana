@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   alert:
-    image: grafana/grafana:4.6.3
+    image: grafana-image
     deploy:
       replicas: 1
       resources:
@@ -17,8 +17,7 @@ services:
         - traefik.frontend.entryPoints=http,https
         - traefik.backend.loadbalancer.method=wrr
     volumes:
-     - ./grafana/etc:/etc/grafana
-     - ./grafana/data:/var/lib/grafana
+     - ./grafana:/var/lib/grafana
      - /etc/timezone:/etc/timezone
      - /etc/localtime:/etc/localtime
     environment:
