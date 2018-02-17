@@ -1,4 +1,4 @@
-KEY=eyJrIjoiSnNPS2NHQ3ZzQ2FiM20ycUg1YnpzaVo2Z2psVW01NmwiLCJuIjoiYXBpa2V5Y3VybCIsImlkIjoxfQ==
+KEY=
 HOST="http://grafana.services.alin.be/api"
 
 echo ""
@@ -18,14 +18,19 @@ echo " "
 echo "Import docker"
 curl -H "Accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -X POST $HOST/dashboards/db -H "Content-Type: application/json" -d @dashboard/docker.json
 
+echo " "
+echo " "
+echo "Import docker"
+curl -H "Accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -X POST $HOST/dashboards/db -H "Content-Type: application/json" -d @dashboard/traefik.json
+
 echo ""
 echo ""
 echo "------------------------"
 
 #Prendre le dashboard from internet and change :
-#"name": "DS_FAAS",           --->       "name": "faasPrometheus",
-#"datasource": "${DS_FAAS}",  ---> "datasource": "faasPrometheus",
+#"name": "DS_FAAS",           --->       "name": "prometheus",
+#"datasource": "${DS_FAAS}",  ---> "datasource": "prometheus",
 #   at the begin            ---> {      "dashboard": {
-#      a the   end                     --->  "overwrite": true }
+#      a the   end                     --->  ,"overwrite": true }
 #
 # vi : %s/${DS_PROMETHEUS}/prometheus/g
