@@ -1,3 +1,4 @@
 data/
 grafana/grafana.db
 configuration/key
+grafana/sessions/
