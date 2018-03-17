@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   alert:
-    image: grafana-image
+    image: registry.services.alin.be/grafana-alin:v1
     deploy:
       replicas: 1
       resources:
